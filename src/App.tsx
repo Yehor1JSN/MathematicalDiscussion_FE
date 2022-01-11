@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { IMessage } from "./Message.interface";
+import { IMessage } from "./interface/IMessage";
 import { MessageService } from "./MessageService";
 import Message from "./Message";
+import { IReplyMessage } from "./interface/IReplyMessage";
 
 const messageService = new MessageService();
 
@@ -29,11 +30,11 @@ function App() {
         }
     };
 
-    const onReplyClick = async (message: IMessage) => {
+    const onReplyClick = async (message: IMessage, replyMessage: IReplyMessage) => {
 
         const messageList = await messageService.createNewMessage({
-            post: newMessage,
-            sender_name: senderName,
+            post: replyMessage.operator + ' ' + replyMessage.number,
+            sender_name: replyMessage.senderName,
             parent_message_id: message.id,
         });
 
@@ -51,30 +52,26 @@ function App() {
                 <Message message={ message } onReplyClick={ onReplyClick }/>
             )) }
 
-            <div className="flex flex-row"></div>
+            <div className="mt-5">
+                <div>new number:</div>
 
-            <div className="md:w-2/3 mt-5">
                 <span>name: </span>
                 <input
                     value={ senderName }
                     onChange={ e => setSenderName(e.target.value) }
-                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
+                    className="bg-gray-200 appearance-none px-1 mx-1 w-24 border-2 border-gray-200 focus:outline-none text-gray-700 leading-tight"
                     type="text"
                 />
-            </div>
 
-            <div className="md:w-2/3">
                 <span>new message: </span>
                 <input
                     value={ newMessage }
+                    type="number"
                     onChange={ e => setNewMessage(e.target.value) }
-                    className="bg-gray-200 appearance-none border-2 border-gray-200 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500"
-                    type="text"
+                    className="bg-gray-200 appearance-none px-1 mx-1 w-24 border-2 border-gray-200 focus:outline-none text-gray-700 leading-tight"
                 />
-            </div>
 
-            <div className="md:w-2/3">
-                <button className='p-1 mt-2 border' onClick={ createNewMessageHandler }>ADD</button>
+                <button className='border border-gray ml-2 px-2' onClick={ createNewMessageHandler }>send</button>
             </div>
 
         </div>

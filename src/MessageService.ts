@@ -1,4 +1,4 @@
-import { IMessage } from './Message.interface';
+import { IMessage } from './interface/IMessage';
 
 const MessageAPIAction = '/message';
 
